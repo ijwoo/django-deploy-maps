@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'localhost',
-    'ec2-3-39-23-184.ap-northeast-2.compute.amazonaws.com',
+    ".ap-northeast-2.compute.amazonaws.com",
 ]
 
 
