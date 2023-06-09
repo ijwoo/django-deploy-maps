@@ -1,0 +1,59 @@
+{% load static %}
+<!--마우스 오버 기능 js-->
+<script src="{% static 'js/main.js' %}"></script> 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <nav class='navbar'>
+            <div class="nav-wrapper container">
+                <a href="{% url 'post_list' %}" class="brand-logo">임재우 Blog</a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'post_list' %}">글 목록보기</a></li>
+                    <li><a href="{% url 'post_new' %}">글 작성하기</a></li>
+                    <li><a href="{% url 'logout' %}">로그아웃</a></li>
+                    
+                    {% else %}
+                    {% if not request.resolver_match.url_name == 'register' %}
+                    <li><a href="{% url 'login' %}">로그인</a></li>
+                    <li><a href="{% url 'maps:display_map' %}">위치찾기</a></li>
+
+                    {% endif %}
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'my_post_list' %}">내 게시글</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="content container">
+            {% if not user.is_authenticated and not request.resolver_match.url_name == 'register' %}
+            <div class="login-message">
+                <p>로그인 후 사용해주세요.</p>
+            </div>
+            {% else %}
+                {% if request.resolver_match.url_name == 'post_list' %}
+                <!--검색기능-->
+                <div class="search-container">
+                    <form method="GET" action="{% url 'post_search' %}">
+                        <input type="text" name="q" placeholder="검색어를 입력하세요">
+                        <button type="submit">검색</button>
+                    </form>
+                </div>
+                {% endif %}
+            {% endif %}
+            {% block content %}
+            <h1>{{ post.title }}</h1>
+            <p>{{ post.content }}</p>
+            {% endblock %}
+        </div>
+    </main>
+</body>
+</html>

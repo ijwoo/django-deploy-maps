@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Nearby Stations</title>
+</head>
+<body>
+  <h1>Nearby Stations</h1>
+  <div id="nearbyStations"></div>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  
+  <script>
+    // API 요청을 보내고 데이터를 받아오는 함수
+    function fetchData() {
+      const apiUrl = 'https://api.odcloud.kr/api/15099316/v1/uddi:cfee6c20-4fee-4c6b-846b-a11c075d0987';
+      const params = {
+        page: 1,
+        perPage: 10,
+        returnType: 'application/json',
+        serviceKey: 'P9PifIFNjZgUQ6k5Fr9KKjP1OD2kp8%2B5RhiLsrVWjJGBr2eL2wP4RKnpdmNZuuWOAXZwrj%2FBFWZOE7PTzItiAw%3D%3D' // 여기에 실제 서비스 키를 입력해야 합니다.
+      };
+
+      axios.get(apiUrl, { params })
+        .then(function(response) {
+          // 데이터를 성공적으로 받아왔을 때 처리할 로직을 작성합니다.
+          const data = response.data;
+          const nearbyStations = document.getElementById('nearbyStations');
+
+          // 데이터를 가공하여 원하는 형태로 표시합니다.
+          data.forEach(function(station) {
+            const stationName = station.역명;
+            const stationAddress = station.주소;
+            const stationElement = document.createElement('p');
+            stationElement.textContent = stationName + ' - ' + stationAddress;
+            nearbyStations.appendChild(stationElement);
+          });
+        })
+        .catch(function(error) {
+          // 데이터 요청이 실패했을 때 처리할 로직을 작성합니다.
+          console.error(error);
+        });
+    }
+
+    // 데이터를 받아오는 함수 호출
+    fetchData();
+  </script>
+</body>
+</html>

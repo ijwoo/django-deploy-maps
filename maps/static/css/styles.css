@@ -1,0 +1,228 @@
+
+.map_wrap {position:relative;width: 100%;height:100%;}
+.title {font-weight:bold;display:block;}
+#centerAddr {display:block;margin-top:2px;font-weight: normal;}
+.bAddr {padding:5px;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+
+
+.additional-info {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: none;
+  width: 1000px; /* 원하는 너비 값으로 설정 */
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.8); /* 원하는 배경색상으로 설정 */
+  color: #fff;
+  text-align: center;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+  .additional-info label {
+    display: block;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  .additional-info .input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .additional-info .input-row {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+  }
+
+  .additional-info input {
+    width: 750px;
+    margin-right: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .additional-info .remove-button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 10px;
+    background-color: #f55454;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .additional-info #add-address-button {
+    margin-top: 10px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 10px;
+    background-color: #6297ff;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .additional-info #find-midpoint-button {
+    margin-top: 10px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 10px;
+    background-color: #6297ff;
+    color: #fff;
+    cursor: pointer;
+  }
+  #midpointResult {
+    margin-bottom: 10;
+    color: #000000;
+    font-weight: bold;
+}
+.coordinate-input::placeholder {
+  /* 원하는 스타일을 설정하세요 */
+  color: #7c7b7b;
+  font-family: 'Nanum Gothic', sans-serif;
+  font-weight: bold;
+}
+
+#menu_wrap {top:0;left:0;bottom:0;width:255px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.801);z-index: 1;font-size:12px;border-radius: 10px;}
+.bg_white {background:#ffffff;}
+#menu_wrap hr {display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}
+#menu_wrap .option{text-align: center;}
+#menu_wrap .option p {margin:10px 0;}  
+#menu_wrap .option button {margin-left:5px;}
+#placesList li {list-style: none;}
+#placesList .item {position:relative;border-bottom:1px solid #888;overflow: hidden;cursor: pointer;min-height: 50px;}
+#placesList .item span {display: block;margin-top:4px;}
+#placesList .item h5, #placesList .item .info {text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+#placesList .item .info{padding:10px 0 10px 55px;}
+#placesList .info .gray {color:#8a8a8a;}
+#placesList .info .jibun {padding-left:26px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;}
+#placesList .info .tel {color:#009900;}
+#placesList .item .markerbg {float:left;position:absolute;width:36px; height:37px;margin:10px 0 0 10px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat; }
+#placesList .item .marker_1 {background-position: 0 -10px;}
+#placesList .item .marker_2 {background-position: 0 -56px;}
+#placesList .item .marker_3 {background-position: 0 -102px}
+#placesList .item .marker_4 {background-position: 0 -148px;}
+#placesList .item .marker_5 {background-position: 0 -194px;}
+#placesList .item .marker_6 {background-position: 0 -240px;}
+#placesList .item .marker_7 {background-position: 0 -286px;}
+#placesList .item .marker_8 {background-position: 0 -332px;}
+#placesList .item .marker_9 {background-position: 0 -378px;}
+#placesList .item .marker_10 {background-position: 0 -423px;}
+#placesList .item .marker_11 {background-position: 0 -470px;}
+#placesList .item .marker_12 {background-position: 0 -516px;}
+#placesList .item .marker_13 {background-position: 0 -562px;}
+#placesList .item .marker_14 {background-position: 0 -608px;}
+#placesList .item .marker_15 {background-position: 0 -654px;}
+#pagination {margin:10px auto;text-align: center;}
+#pagination a {display:inline-block;margin-right:10px;}
+#pagination .on {font-weight: bold; cursor: default;color:#777;}
+
+#keyword {
+  width: 130px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#search-button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #7e93f1;
+  color: #fff;
+  cursor: pointer;
+}
+
+#search-label {
+  font-weight: bold;
+  color: #555;
+  font-size: 14px;
+}
+/*임시*/
+.sidebar-container {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  z-index: 2;
+}
+
+#toggle-sidebar-button {
+  background-color: #7e93f1;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+  line-height: 1;
+  text-align: center;
+  cursor: pointer;
+}
+
+#menu_wrap {
+  display: none;
+}
+
+#menu_wrap.active {
+  display: block;
+}
+
+.customoverlay {position:relative;bottom:40px;border-radius:3px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}
+.customoverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
+.customoverlay a {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:14px;font-weight:bold;overflow:hidden;background: #00aaff url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;}
+.customoverlay .title {display:block;text-align:center;background:#fff;margin-right:35px;padding:10px 15px;font-size:14px;font-weight:bold;}
+.customoverlay:after {content:'';position:absolute;margin-left:-12px;left:50%;bottom:-12px;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
+
+.customoverlay2 {position:relative;border-radius:3px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}
+.customoverlay2:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
+.customoverlay2 a {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:10px;font-weight:bold;overflow:hidden; background: #3ee8ff url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;}
+.customoverlay2 .title {display:block;text-align:center;background:#fff;margin-right:35px;padding:10px 15px;font-size:14px;font-weight:bold;}
+.customoverlay2 :after {position:absolute;margin-left:-12px;left:50%;bottom:-12px;width:20px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
+
+
+
+.additional-info {
+  display: none;
+}
+
+#show-additional-info-button {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 30px;
+  background-color: rgba(126, 147, 241, 0.8);
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+#show-additional-info-button:hover {
+  background-color: rgba(126, 147, 241, 1);
+}
+
+#show-additional-info-button:active {
+  background-color: rgba(126, 147, 241, 1);
+}
+
+body {
+  overflow-y: scroll;
+}

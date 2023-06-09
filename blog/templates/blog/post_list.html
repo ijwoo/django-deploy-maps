@@ -1,0 +1,49 @@
+{% extends 'blog/base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <div class="card-wrapper">
+    {% for post in posts %}
+      {% if post.is_public or user.is_authenticated and post.author == user %}
+        <div class="card" onmouseover="showPreview(event)">
+          <div class="card-image">
+            <img src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'images/default_post_image.png' %}{% endif %}">
+          </div>
+          <div class="card-content">
+            <span class="card-title">{{ post.title }}</span>
+            <p>작성자: {{ post.author.username }}</p>
+            <p>{{ post.content|truncatewords:5 }}</p>
+          </div>
+          <div class="card-action">
+            <a href="{% url 'post_detail' pk=post.pk %}">더 보기</a>
+          </div>
+          <div class="preview">
+            {{ post.content|truncatewords:30}}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  
+  <!-- 페이지 세분화 한페이지에 -->
+  {% if user.is_authenticated %}
+    <div class="pagination">
+      <span class="step-links">
+        {% if posts.has_previous %}
+          <a href="?page=1">&laquo; 처음</a>
+          <a href="?page={{ posts.previous_page_number }}">이전</a>
+        {% endif %}
+      
+        <span class="current-page">
+          현재 {{ posts.number }} / {{ posts.paginator.num_pages }}
+        </span>
+      
+        {% if posts.has_next %}
+          <a href="?page={{ posts.next_page_number }}">다음</a>
+          <a href="?page={{ posts.paginator.num_pages }}">마지막 &raquo;</a>
+        {% endif %}
+      </span>
+    </div>
+  {% endif %}
+{% endblock %}
