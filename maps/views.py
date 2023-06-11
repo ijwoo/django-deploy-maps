@@ -104,3 +104,23 @@ def search(request):
     data = response.json()
 
     return JsonResponse(data, safe=False)
+
+#가까운 역 찾기
+def find_nearest_station(midpoint):
+    api_key = "2a976c987f3617744b5ee3ea43df3bd0"
+    url = "https://dapi.kakao.com/v2/local/search/keyword.json"
+    headers = {"Authorization": f"KakaoAK {api_key}"}
+    query = "지하철역"  # '지하철역'으로 검색하도록 수정
+    params = {"query": query, "x": midpoint[1], "y": midpoint[0]}
+    
+    response = requests.get(url, headers=headers, params=params)
+    data = response.json()
+
+    if "documents" in data and data["documents"]:
+        for station in data["documents"]:
+            if station.get("category_group_name") == "지하철역":
+                return station["place_name"]  # 첫 번째 가까운 '지하철역'의 'place_name'을 반환
+    
+    return None
+
+#대중교통 경로 찾기 예시
