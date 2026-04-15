@@ -1,5 +1,4 @@
 myvenv/
-staticfiles/
 staticfiles_build/
 __pycache__/
 *.pyc

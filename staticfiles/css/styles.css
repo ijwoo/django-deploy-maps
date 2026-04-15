@@ -1,0 +1,739 @@
+/* =======================================
+   기본 레이아웃
+   ======================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0f172a;
+    overflow: hidden;
+}
+
+#map {
+    position: fixed;
+    top: 48px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+/* =======================================
+   상단 네비게이션
+   ======================================= */
+.topnav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 200;
+    height: 48px;
+    background: rgba(15, 23, 42, 0.96);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 18px;
+}
+
+.topnav-left {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-shrink: 0;
+}
+
+.topnav-icon {
+    width: 18px;
+    height: 18px;
+    color: #818cf8;
+}
+
+.topnav-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #f1f5f9;
+    letter-spacing: -0.01em;
+}
+
+.topnav-desc {
+    font-size: 12px;
+    color: #475569;
+}
+
+/* =======================================
+   패널 토글 버튼
+   ======================================= */
+.btn-toggle {
+    position: fixed;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 150;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 34px;
+    padding: 0 16px;
+    background: #4f46e5;
+    color: #fff;
+    font-size: 12.5px;
+    font-weight: 600;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(79,70,229,0.45);
+    transition: background 0.15s, transform 0.1s;
+    white-space: nowrap;
+}
+
+.btn-toggle:hover { background: #4338ca; }
+.btn-toggle:active { transform: translateX(-50%) scale(0.97); }
+
+/* =======================================
+   주소 입력 패널
+   ======================================= */
+.panel {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 150;
+    width: 480px;
+    max-width: calc(100vw - 32px);
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 16px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    padding: 16px 18px 14px;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.panel--hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(8px);
+}
+
+.panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.panel-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #e2e8f0;
+    letter-spacing: -0.01em;
+}
+
+.panel-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-myloc {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    background: rgba(99,102,241,0.15);
+    border: 1px solid rgba(99,102,241,0.3);
+    border-radius: 8px;
+    color: #a5b4fc;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+}
+
+.btn-myloc:hover { background: rgba(99,102,241,0.25); }
+.btn-myloc:disabled { opacity: 0.5; cursor: default; }
+
+.panel-close {
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.06);
+    border: none;
+    border-radius: 6px;
+    color: #94a3b8;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.panel-close:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+/* =======================================
+   입력 필드
+   ======================================= */
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 10px;
+}
+
+.input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* A, B, C 레이블 */
+.input-label {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background: #4f46e5;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.coordinate-input {
+    flex: 1;
+    padding: 9px 12px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 9px;
+    color: #f1f5f9;
+    font-size: 12.5px;
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+    min-width: 0;
+}
+
+.coordinate-input::placeholder { color: #475569; font-size: 12px; }
+.coordinate-input:focus {
+    border-color: #6366f1;
+    background: rgba(255,255,255,0.09);
+}
+
+.remove-button {
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(239,68,68,0.12);
+    border: none;
+    border-radius: 7px;
+    color: #f87171;
+    font-size: 11px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.remove-button:hover { background: rgba(239,68,68,0.25); }
+
+/* =======================================
+   패널 액션 버튼
+   ======================================= */
+.panel-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.btn-add {
+    padding: 8px 14px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 9px;
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+}
+
+.btn-add:hover { background: rgba(255,255,255,0.07); color: #e2e8f0; }
+
+.btn-find {
+    flex: 1;
+    padding: 8px 0;
+    background: #4f46e5;
+    border: none;
+    border-radius: 9px;
+    color: #fff;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.btn-find:hover { background: #4338ca; }
+
+/* =======================================
+   결과 표시
+   ======================================= */
+#midpointResult {
+    margin-bottom: 10px;
+}
+
+.result-station {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.result-station-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #818cf8;
+}
+
+.route-loading {
+    font-size: 12px;
+    color: #475569;
+}
+
+.route-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 12px;
+}
+
+.route-item:last-child { border-bottom: none; }
+
+.route-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.route-num {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.route-label {
+    flex: 1;
+    color: #94a3b8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+}
+
+.route-fare { color: #34d399; font-weight: 600; white-space: nowrap; }
+.route-time { color: #60a5fa; font-weight: 600; white-space: nowrap; min-width: 32px; text-align: right; }
+.route-error { color: #f87171; font-size: 11px; }
+
+/* =======================================
+   사이드바 (장소 검색)
+   ======================================= */
+.sidebar-container {
+    position: fixed;
+    top: 60px;
+    left: 14px;
+    z-index: 150;
+}
+
+#toggle-sidebar-button {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15,23,42,0.9);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    color: #94a3b8;
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    transition: background 0.15s, color 0.15s;
+}
+
+#toggle-sidebar-button:hover { background: #1e293b; color: #fff; }
+
+#menu_wrap {
+    display: none;
+    margin-top: 8px;
+    width: 260px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+}
+
+#menu_wrap.active { display: block; }
+
+.sidebar-title {
+    padding: 12px 14px 10px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #111827;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.search-form {
+    display: flex;
+    gap: 6px;
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+#keyword {
+    flex: 1;
+    min-width: 0;
+    padding: 7px 10px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #111827;
+    background: #f9fafb;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+#keyword:focus { border-color: #6366f1; background: #fff; }
+#keyword::placeholder { color: #9ca3af; font-size: 11.5px; }
+
+#search-button {
+    padding: 7px 12px;
+    background: #4f46e5;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background 0.15s;
+}
+
+#search-button:hover { background: #4338ca; }
+
+/* =======================================
+   장소 목록
+   ======================================= */
+#placesList {
+    margin: 0;
+    padding: 4px 0;
+    max-height: 340px;
+    overflow-y: auto;
+    list-style: none;
+}
+
+#placesList::-webkit-scrollbar { width: 4px; }
+#placesList::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
+
+#placesList .item {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    padding: 0;
+    border-bottom: 1px solid #f3f4f6;
+    cursor: pointer;
+    transition: background 0.1s;
+    min-height: 52px;
+    overflow: hidden;
+}
+
+#placesList .item:last-child { border-bottom: none; }
+#placesList .item:hover { background: #f5f3ff; }
+
+#placesList .item .markerbg {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 37px;
+    background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;
+    flex-shrink: 0;
+}
+
+#placesList .item .marker_1  { background-position: 0 -10px; }
+#placesList .item .marker_2  { background-position: 0 -56px; }
+#placesList .item .marker_3  { background-position: 0 -102px; }
+#placesList .item .marker_4  { background-position: 0 -148px; }
+#placesList .item .marker_5  { background-position: 0 -194px; }
+#placesList .item .marker_6  { background-position: 0 -240px; }
+#placesList .item .marker_7  { background-position: 0 -286px; }
+#placesList .item .marker_8  { background-position: 0 -332px; }
+#placesList .item .marker_9  { background-position: 0 -378px; }
+#placesList .item .marker_10 { background-position: 0 -423px; }
+
+#placesList .item .info {
+    padding: 9px 12px 9px 50px;
+    flex: 1;
+    min-width: 0;
+}
+
+#placesList .item h5 {
+    margin: 0 0 2px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #111827;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#placesList .item span {
+    display: block;
+    font-size: 11px;
+    color: #6b7280;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 1px;
+    line-height: 1.5;
+}
+
+#placesList .info .jibun { color: #9ca3af; }
+#placesList .info .tel { color: #4f46e5; font-weight: 600; margin-top: 2px; }
+
+/* =======================================
+   페이지네이션
+   ======================================= */
+#pagination {
+    display: flex;
+    justify-content: center;
+    gap: 3px;
+    padding: 9px 8px;
+    border-top: 1px solid #f1f1f1;
+}
+
+#pagination a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    font-size: 12px;
+    color: #6b7280;
+    text-decoration: none;
+    transition: background 0.1s;
+}
+
+#pagination a:hover { background: #f3f4f6; color: #111827; }
+#pagination .on { background: #4f46e5 !important; color: #fff !important; font-weight: 700; cursor: default; }
+
+/* =======================================
+   검색 결과 선택 오버레이
+   ======================================= */
+.search-result-overlay {
+    position: relative;
+    bottom: 50px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    padding: 11px 14px 10px;
+    min-width: 180px;
+    max-width: 240px;
+    text-align: center;
+}
+
+.overlay-close-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f3f4f6;
+    border: none;
+    border-radius: 5px;
+    color: #6b7280;
+    font-size: 10px;
+    cursor: pointer;
+    line-height: 1;
+    transition: background 0.15s, color 0.15s;
+}
+
+.overlay-close-btn:hover { background: #e5e7eb; color: #111827; }
+
+.search-result-overlay::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #fff;
+}
+
+.search-result-overlay strong {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.search-result-overlay span {
+    display: block;
+    font-size: 11px;
+    color: #6b7280;
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.search-result-overlay button {
+    padding: 5px 14px;
+    background: #4f46e5;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.search-result-overlay button:hover { background: #4338ca; }
+
+/* =======================================
+   지도 커스텀 오버레이
+   ======================================= */
+.customoverlay {
+    position: relative;
+    bottom: 40px;
+    border-radius: 6px;
+    border: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    float: left;
+}
+
+.customoverlay a {
+    display: block;
+    text-decoration: none;
+    color: #000;
+    text-align: center;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    overflow: hidden;
+    background: #4f46e5 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;
+}
+
+.customoverlay .title {
+    display: block;
+    background: #fff;
+    margin-right: 35px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.customoverlay:after {
+    content: '';
+    position: absolute;
+    margin-left: -12px;
+    left: 50%;
+    bottom: -12px;
+    width: 22px;
+    height: 12px;
+    background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png');
+}
+
+.customoverlay2 {
+    position: relative;
+    bottom: 40px;
+    border-radius: 6px;
+    border: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    float: left;
+}
+
+.customoverlay2 a {
+    display: block;
+    text-decoration: none;
+    color: #000;
+    text-align: center;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    overflow: hidden;
+    background: #38bdf8 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;
+}
+
+.customoverlay2 .title {
+    display: block;
+    background: #fff;
+    margin-right: 35px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.customoverlay2:after {
+    content: '';
+    position: absolute;
+    margin-left: -12px;
+    left: 50%;
+    bottom: -12px;
+    width: 22px;
+    height: 12px;
+    background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png');
+}
+
+/* =======================================
+   토스트 알림
+   ======================================= */
+.toast {
+    position: fixed;
+    bottom: 180px;
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    z-index: 300;
+    background: rgba(15,23,42,0.92);
+    color: #e2e8f0;
+    font-size: 12.5px;
+    font-weight: 500;
+    padding: 9px 18px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+    white-space: nowrap;
+}
+
+.toast--show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
