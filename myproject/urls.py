@@ -22,8 +22,8 @@ from django.conf.urls.static import static
 from maps import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('blog/', include('blog.urls')),  # blog 앱 URL 추가
-    path('', RedirectView.as_view(url='blog/', permanent=True)),  # 루트 URL 리디렉션 추가
+    # path('blog/', include('blog.urls')),
+    path('', RedirectView.as_view(url='maps/display-map/', permanent=False)),
     path('maps/', include('maps.urls')),
 ]
 if settings.DEBUG:

@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python manage.py runserver)",
+      "Bash(D:/django-deploy-maps/myvenv/Scripts/python.exe D:/django-deploy-maps/manage.py runserver)",
+      "Bash(where python3:*)",
+      "Bash(where python:*)",
+      "Read(//c/Users/dlawodn/AppData/Local/Programs/**)",
+      "Bash(ls /c/Python*)",
+      "Bash(/c/Users/dlawodn/AppData/Local/Microsoft/WindowsApps/python.exe:*)",
+      "Bash(cmd.exe /c \"python --version 2>&1\")",
+      "Bash(cmd.exe /c \"where python 2>&1\")",
+      "Bash(cmd.exe:*)",
+      "Bash(python manage.py shell -c \"from django.contrib.auth.models import User; print\\(list\\(User.objects.values\\('username', 'is_superuser'\\)\\)\\)\")",
+      "Bash(python3 manage.py shell -c \"from django.contrib.auth.models import User; print\\(list\\(User.objects.values\\('username', 'is_superuser'\\)\\)\\)\")"
+    ]
+  }
+}
