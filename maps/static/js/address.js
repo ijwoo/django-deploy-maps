@@ -1,4 +1,5 @@
 var LABELS = ['1', '2', '3', '4', '5'];
+var pendingAddress = null;
 
 function updateInputLabels() {
     var rows = document.querySelectorAll('.input-row');
@@ -8,25 +9,99 @@ function updateInputLabels() {
     });
 }
 
-// 삭제 버튼 활성/비활성 상태 갱신 (최소 2개 유지)
+// 삭제 버튼 활성/비활성 (최소 2개 유지)
 function updateRemoveButtons() {
     var rows = document.querySelectorAll('.input-row');
     var count = rows.length;
     rows.forEach(function(row) {
         var btn = row.querySelector('.remove-button');
-        if (btn) {
-            btn.disabled = count <= 2;
-        }
+        if (btn) btn.disabled = count <= 2;
     });
 }
 
-// 추가 버튼 활성/비활성 상태 갱신 (최대 5개)
+// 추가 버튼 활성/비활성 (최대 5개)
 function updateAddButton() {
     var btn = document.querySelector('.btn-add');
     if (!btn) return;
     var count = document.querySelectorAll('.coordinate-input').length;
     btn.disabled = count >= 5;
     btn.textContent = count >= 5 ? '최대 5개' : '+ 추가';
+}
+
+// 출발지 추가 확인 UI 표시
+function showAddConfirm(address) {
+    dismissAddConfirm();
+
+    if (document.querySelectorAll('.coordinate-input').length >= 5) {
+        showToast('최대 5개까지 입력할 수 있습니다');
+        return;
+    }
+
+    pendingAddress = address;
+
+    var wrap = document.createElement('div');
+    wrap.id = 'add-confirm';
+    wrap.className = 'add-confirm';
+
+    var textEl = document.createElement('div');
+    textEl.className = 'add-confirm-text';
+    textEl.textContent = '출발지를 추가할까요?';
+
+    var addrEl = document.createElement('div');
+    addrEl.className = 'add-confirm-addr';
+    addrEl.textContent = address.length > 28 ? address.substring(0, 27) + '…' : address;
+
+    var actionsEl = document.createElement('div');
+    actionsEl.className = 'add-confirm-actions';
+
+    var yesBtn = document.createElement('button');
+    yesBtn.className = 'add-confirm-yes';
+    yesBtn.textContent = '+ 출발지 추가';
+    yesBtn.addEventListener('click', function () {
+        var addr = pendingAddress;
+        dismissAddConfirm();
+        addAddressInput();
+        var inputs = document.querySelectorAll('.coordinate-input');
+        if (inputs.length > 0) {
+            inputs[inputs.length - 1].value = addr;
+        }
+        // 패널이 닫혀있으면 열기
+        var panel = document.getElementById('panel');
+        if (panel && panel.classList.contains('panel--hidden')) {
+            togglePanel();
+        }
+        showToast('출발지가 추가되었습니다');
+    });
+
+    var noBtn = document.createElement('button');
+    noBtn.className = 'add-confirm-no';
+    noBtn.textContent = '취소';
+    noBtn.addEventListener('click', function () {
+        dismissAddConfirm();
+    });
+
+    actionsEl.appendChild(yesBtn);
+    actionsEl.appendChild(noBtn);
+    wrap.appendChild(textEl);
+    wrap.appendChild(addrEl);
+    wrap.appendChild(actionsEl);
+
+    // 입력 컨테이너 위에 삽입
+    var panel = document.getElementById('panel');
+    var inputContainer = document.getElementById('input-container');
+    if (panel && inputContainer) {
+        panel.insertBefore(wrap, inputContainer);
+        // 패널이 닫혀있으면 열기
+        if (panel.classList.contains('panel--hidden')) {
+            togglePanel();
+        }
+    }
+}
+
+function dismissAddConfirm() {
+    pendingAddress = null;
+    var existing = document.getElementById('add-confirm');
+    if (existing) existing.remove();
 }
 
 function addAddressInput() {
@@ -98,7 +173,6 @@ function addCurrentLocation() {
                 fillNextInput(address);
                 map.setCenter(new kakao.maps.LatLng(lat, lng));
                 map.setLevel(4);
-                showToast('내 위치가 입력되었습니다');
             } else {
                 showToast('현재 위치의 주소를 가져올 수 없습니다');
             }
@@ -112,16 +186,16 @@ function addCurrentLocation() {
 
 function fillNextInput(address) {
     var inputs = document.querySelectorAll('.coordinate-input');
+    // 빈 칸이 있으면 첫 번째 빈 칸에 채움
     for (var i = 0; i < inputs.length; i++) {
         if (!inputs[i].value.trim()) {
             inputs[i].value = address;
+            showToast('출발지로 지정되었습니다');
             return;
         }
     }
-    // 빈 칸 없으면 마지막에 채움
-    if (inputs.length > 0) {
-        inputs[inputs.length - 1].value = address;
-    }
+    // 모든 칸이 채워진 경우 → 추가 여부 확인
+    showAddConfirm(address);
 }
 
 // 페이지 로드 시 초기 버튼 상태 설정

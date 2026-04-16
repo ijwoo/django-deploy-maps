@@ -54,7 +54,7 @@ function getListItem(place, index) {
     var itemEl = document.createElement('li');
     itemEl.className = 'item';
 
-    var itemStr = '<span class="markerbg marker_' + index + '"></span>' +
+    var itemStr = '<span class="place-num">' + index + '</span>' +
                   '<div class="info">' +
                   '   <h5>' + place.place_name + '</h5>';
 
@@ -136,8 +136,6 @@ function selectSearchPlace(place) {
 }
 
 function setAsInput(address) {
-    fillNextInput(address);
-
     if (searchOverlay) {
         searchOverlay.setMap(null);
         searchOverlay = null;
@@ -149,7 +147,7 @@ function setAsInput(address) {
         togglePanel();
     }
 
-    showToast('출발지로 지정되었습니다');
+    fillNextInput(address);
 }
 
 function removeAllChildNodes(el) {

@@ -62,11 +62,6 @@ kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
             e.stopPropagation();
             fillNextInput(address);
             clearClickOverlay();
-            var panel = document.getElementById('panel');
-            if (panel && panel.classList.contains('panel--hidden')) {
-                togglePanel();
-            }
-            showToast('출발지로 지정되었습니다');
         });
 
         // 오버레이 영역 mousedown도 차단
@@ -348,15 +343,21 @@ function displayRouteResults(routeResults, addresses) {
     if (r) {
       html += '<div class="route-item">' +
               '<span class="route-num" style="background:' + color + '">' + (i + 1) + '</span>' +
+              '<div class="route-info">' +
               '<span class="route-label">' + label + '</span>' +
-              '<span class="route-fare">' + r.fare.toLocaleString() + '원</span>' +
-              '<span class="route-time">' + r.time + '분</span>' +
+              '<div class="route-meta">' +
+              '<span class="route-time">⏱ ' + r.time + '분</span>' +
+              '<span class="route-fare">💳 ' + r.fare.toLocaleString() + '원</span>' +
+              '</div>' +
+              '</div>' +
               '</div>';
     } else {
-      html += '<div class="route-item route-item--error">' +
+      html += '<div class="route-item">' +
               '<span class="route-num" style="background:' + color + '">' + (i + 1) + '</span>' +
+              '<div class="route-info">' +
               '<span class="route-label">' + label + '</span>' +
-              '<span class="route-error">경로 없음</span>' +
+              '<div class="route-meta"><span class="route-error">경로 없음</span></div>' +
+              '</div>' +
               '</div>';
     }
   }
