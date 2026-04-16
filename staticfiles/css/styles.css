@@ -97,14 +97,14 @@ body {
     left: 50%;
     transform: translateX(-50%);
     z-index: 150;
-    width: 480px;
+    width: 560px;
     max-width: calc(100vw - 32px);
-    background: rgba(15, 23, 42, 0.95);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.09);
-    border-radius: 16px;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
-    padding: 16px 18px 14px;
+    background: rgba(15, 23, 42, 0.97);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 18px;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.55);
+    padding: 18px 20px 16px;
     transition: opacity 0.2s, transform 0.2s;
 }
 
@@ -118,11 +118,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 }
 
 .panel-title {
-    font-size: 13px;
+    font-size: 13.5px;
     font-weight: 700;
     color: #e2e8f0;
     letter-spacing: -0.01em;
@@ -138,12 +138,12 @@ body {
     display: flex;
     align-items: center;
     gap: 5px;
-    padding: 5px 10px;
+    padding: 6px 11px;
     background: rgba(99,102,241,0.15);
     border: 1px solid rgba(99,102,241,0.3);
     border-radius: 8px;
     color: #a5b4fc;
-    font-size: 11.5px;
+    font-size: 12px;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.15s;
@@ -154,14 +154,14 @@ body {
 .btn-myloc:disabled { opacity: 0.5; cursor: default; }
 
 .panel-close {
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: rgba(255,255,255,0.06);
     border: none;
-    border-radius: 6px;
+    border-radius: 7px;
     color: #94a3b8;
     font-size: 12px;
     cursor: pointer;
@@ -171,65 +171,131 @@ body {
 .panel-close:hover { background: rgba(255,255,255,0.12); color: #fff; }
 
 /* =======================================
+   출발지 추가 확인 UI
+   ======================================= */
+.add-confirm {
+    background: rgba(99,102,241,0.1);
+    border: 1px solid rgba(99,102,241,0.35);
+    border-radius: 11px;
+    padding: 11px 13px;
+    margin-bottom: 12px;
+    animation: confirmIn 0.15s ease;
+}
+
+@keyframes confirmIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.add-confirm-text {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #c7d2fe;
+    margin-bottom: 3px;
+}
+
+.add-confirm-addr {
+    font-size: 11.5px;
+    color: #64748b;
+    margin-bottom: 9px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.add-confirm-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.add-confirm-yes {
+    flex: 1;
+    padding: 6px 0;
+    background: #4f46e5;
+    border: none;
+    border-radius: 7px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.add-confirm-yes:hover { background: #4338ca; }
+
+.add-confirm-no {
+    padding: 6px 16px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 7px;
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.add-confirm-no:hover { background: rgba(255,255,255,0.06); }
+
+/* =======================================
    입력 필드
    ======================================= */
 .input-container {
     display: flex;
     flex-direction: column;
-    gap: 7px;
-    margin-bottom: 10px;
+    gap: 8px;
+    margin-bottom: 12px;
 }
 
 .input-row {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 9px;
 }
 
-/* A, B, C 레이블 */
 .input-label {
-    width: 22px;
-    height: 22px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 6px;
-    background: #4f46e5;
-    color: #fff;
-    font-size: 11px;
-    font-weight: 700;
-}
-
-.coordinate-input {
-    flex: 1;
-    padding: 9px 12px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 9px;
-    color: #f1f5f9;
-    font-size: 12.5px;
-    outline: none;
-    transition: border-color 0.15s, background 0.15s;
-    min-width: 0;
-}
-
-.coordinate-input::placeholder { color: #475569; font-size: 12px; }
-.coordinate-input:focus {
-    border-color: #6366f1;
-    background: rgba(255,255,255,0.09);
-}
-
-.remove-button {
     width: 26px;
     height: 26px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 7px;
+    background: #4f46e5;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.coordinate-input {
+    flex: 1;
+    padding: 11px 14px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    color: #f1f5f9;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+    min-width: 0;
+}
+
+.coordinate-input::placeholder { color: #475569; font-size: 12.5px; }
+.coordinate-input:focus {
+    border-color: #6366f1;
+    background: rgba(255,255,255,0.09);
+}
+
+.remove-button {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: rgba(239,68,68,0.12);
     border: none;
-    border-radius: 7px;
+    border-radius: 8px;
     color: #f87171;
     font-size: 11px;
     cursor: pointer;
@@ -237,6 +303,7 @@ body {
 }
 
 .remove-button:hover { background: rgba(239,68,68,0.25); }
+.remove-button:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
 
 /* =======================================
    패널 액션 버튼
@@ -248,12 +315,12 @@ body {
 }
 
 .btn-add {
-    padding: 8px 14px;
+    padding: 10px 16px;
     background: transparent;
     border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 9px;
+    border-radius: 10px;
     color: #94a3b8;
-    font-size: 12px;
+    font-size: 12.5px;
     font-weight: 500;
     cursor: pointer;
     transition: background 0.15s, color 0.15s;
@@ -261,21 +328,23 @@ body {
 }
 
 .btn-add:hover { background: rgba(255,255,255,0.07); color: #e2e8f0; }
+.btn-add:disabled { opacity: 0.4; cursor: default; pointer-events: none; }
 
 .btn-find {
     flex: 1;
-    padding: 8px 0;
+    padding: 10px 0;
     background: #4f46e5;
     border: none;
-    border-radius: 9px;
+    border-radius: 10px;
     color: #fff;
-    font-size: 12.5px;
+    font-size: 13px;
     font-weight: 700;
     cursor: pointer;
     transition: background 0.15s;
 }
 
 .btn-find:hover { background: #4338ca; }
+.btn-find:disabled { background: #374151; color: #6b7280; cursor: not-allowed; }
 
 /* =======================================
    결과 표시
@@ -288,13 +357,13 @@ body {
     display: flex;
     align-items: center;
     gap: 7px;
-    margin-bottom: 8px;
-    padding-bottom: 8px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
     border-bottom: 1px solid rgba(255,255,255,0.07);
 }
 
 .result-station-name {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
     color: #818cf8;
 }
@@ -302,51 +371,91 @@ body {
 .route-loading {
     font-size: 12px;
     color: #475569;
+    padding: 4px 0;
 }
 
 .route-item {
     display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 4px 0;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
     border-bottom: 1px solid rgba(255,255,255,0.05);
-    font-size: 12px;
 }
 
 .route-item:last-child { border-bottom: none; }
 
-.route-dot {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    flex-shrink: 0;
-}
-
 .route-num {
-    width: 18px;
-    height: 18px;
+    width: 22px;
+    height: 22px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 5px;
+    border-radius: 6px;
     color: #fff;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
+    margin-top: 1px;
+}
+
+.route-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .route-label {
-    flex: 1;
-    color: #94a3b8;
+    color: #cbd5e1;
+    font-size: 12.5px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    min-width: 0;
 }
 
-.route-fare { color: #34d399; font-weight: 600; white-space: nowrap; }
-.route-time { color: #60a5fa; font-weight: 600; white-space: nowrap; min-width: 32px; text-align: right; }
-.route-error { color: #f87171; font-size: 11px; }
+.route-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.route-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: rgba(96,165,250,0.12);
+    border: 1px solid rgba(96,165,250,0.3);
+    color: #60a5fa;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 2px 9px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.route-fare {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: rgba(52,211,153,0.12);
+    border: 1px solid rgba(52,211,153,0.3);
+    color: #34d399;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 2px 9px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.route-error {
+    color: #f87171;
+    font-size: 11.5px;
+    background: rgba(248,113,113,0.1);
+    border: 1px solid rgba(248,113,113,0.2);
+    padding: 2px 9px;
+    border-radius: 20px;
+}
 
 /* =======================================
    사이드바 (장소 검색)
@@ -359,71 +468,76 @@ body {
 }
 
 #toggle-sidebar-button {
-    width: 36px;
-    height: 36px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    background: rgba(15,23,42,0.9);
+    gap: 6px;
+    height: 34px;
+    padding: 0 13px;
+    background: rgba(15,23,42,0.92);
     border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 10px;
+    border-radius: 20px;
     color: #94a3b8;
+    font-size: 12.5px;
+    font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.35);
     transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
 }
 
-#toggle-sidebar-button:hover { background: #1e293b; color: #fff; }
+#toggle-sidebar-button:hover { background: #1e293b; color: #e2e8f0; }
 
 #menu_wrap {
     display: none;
     margin-top: 8px;
-    width: 260px;
-    background: #fff;
-    border-radius: 14px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-    border: 1px solid #e5e7eb;
+    width: 300px;
+    background: rgba(15, 23, 42, 0.97);
+    backdrop-filter: blur(14px);
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.09);
     overflow: hidden;
 }
 
 #menu_wrap.active { display: block; }
 
 .sidebar-title {
-    padding: 12px 14px 10px;
-    font-size: 12.5px;
+    padding: 13px 16px 11px;
+    font-size: 13px;
     font-weight: 700;
-    color: #111827;
-    border-bottom: 1px solid #f1f1f1;
+    color: #e2e8f0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    letter-spacing: -0.01em;
 }
 
 .search-form {
     display: flex;
-    gap: 6px;
-    padding: 10px 12px;
-    border-bottom: 1px solid #f1f1f1;
+    gap: 7px;
+    padding: 11px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
 }
 
 #keyword {
     flex: 1;
     min-width: 0;
-    padding: 7px 10px;
-    border: 1.5px solid #e5e7eb;
-    border-radius: 8px;
-    font-size: 12px;
-    color: #111827;
-    background: #f9fafb;
+    padding: 8px 11px;
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 9px;
+    font-size: 12.5px;
+    color: #f1f5f9;
+    background: rgba(255,255,255,0.06);
     outline: none;
-    transition: border-color 0.15s;
+    transition: border-color 0.15s, background 0.15s;
 }
 
-#keyword:focus { border-color: #6366f1; background: #fff; }
-#keyword::placeholder { color: #9ca3af; font-size: 11.5px; }
+#keyword:focus { border-color: #6366f1; background: rgba(255,255,255,0.09); }
+#keyword::placeholder { color: #475569; font-size: 12px; }
 
 #search-button {
-    padding: 7px 12px;
+    padding: 8px 13px;
     background: #4f46e5;
     border: none;
-    border-radius: 8px;
+    border-radius: 9px;
     color: #fff;
     font-size: 12px;
     font-weight: 600;
@@ -440,63 +554,54 @@ body {
    ======================================= */
 #placesList {
     margin: 0;
-    padding: 4px 0;
-    max-height: 340px;
+    padding: 6px 0;
+    max-height: 360px;
     overflow-y: auto;
     list-style: none;
 }
 
 #placesList::-webkit-scrollbar { width: 4px; }
-#placesList::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
+#placesList::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 4px; }
 
 #placesList .item {
-    position: relative;
     display: flex;
-    align-items: flex-start;
-    padding: 0;
-    border-bottom: 1px solid #f3f4f6;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
     cursor: pointer;
     transition: background 0.1s;
-    min-height: 52px;
-    overflow: hidden;
 }
 
 #placesList .item:last-child { border-bottom: none; }
-#placesList .item:hover { background: #f5f3ff; }
+#placesList .item:hover { background: rgba(99,102,241,0.1); }
 
-#placesList .item .markerbg {
-    position: absolute;
-    left: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 36px;
-    height: 37px;
-    background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;
+/* 번호 배지 */
+.place-num {
+    width: 24px;
+    height: 24px;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(99,102,241,0.2);
+    border: 1px solid rgba(99,102,241,0.35);
+    border-radius: 7px;
+    color: #a5b4fc;
+    font-size: 11.5px;
+    font-weight: 700;
 }
 
-#placesList .item .marker_1  { background-position: 0 -10px; }
-#placesList .item .marker_2  { background-position: 0 -56px; }
-#placesList .item .marker_3  { background-position: 0 -102px; }
-#placesList .item .marker_4  { background-position: 0 -148px; }
-#placesList .item .marker_5  { background-position: 0 -194px; }
-#placesList .item .marker_6  { background-position: 0 -240px; }
-#placesList .item .marker_7  { background-position: 0 -286px; }
-#placesList .item .marker_8  { background-position: 0 -332px; }
-#placesList .item .marker_9  { background-position: 0 -378px; }
-#placesList .item .marker_10 { background-position: 0 -423px; }
-
 #placesList .item .info {
-    padding: 9px 12px 9px 50px;
     flex: 1;
     min-width: 0;
 }
 
 #placesList .item h5 {
-    margin: 0 0 2px;
-    font-size: 12.5px;
-    font-weight: 700;
-    color: #111827;
+    margin: 0 0 3px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #e2e8f0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -504,8 +609,8 @@ body {
 
 #placesList .item span {
     display: block;
-    font-size: 11px;
-    color: #6b7280;
+    font-size: 11.5px;
+    color: #64748b;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -513,8 +618,8 @@ body {
     line-height: 1.5;
 }
 
-#placesList .info .jibun { color: #9ca3af; }
-#placesList .info .tel { color: #4f46e5; font-weight: 600; margin-top: 2px; }
+#placesList .info .jibun { color: #475569; font-size: 11px; }
+#placesList .info .tel { color: #818cf8; font-weight: 600; margin-top: 3px; font-size: 11.5px; }
 
 /* =======================================
    페이지네이션
@@ -522,25 +627,25 @@ body {
 #pagination {
     display: flex;
     justify-content: center;
-    gap: 3px;
-    padding: 9px 8px;
-    border-top: 1px solid #f1f1f1;
+    gap: 4px;
+    padding: 10px 8px;
+    border-top: 1px solid rgba(255,255,255,0.06);
 }
 
 #pagination a {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
     border-radius: 7px;
-    font-size: 12px;
-    color: #6b7280;
+    font-size: 12.5px;
+    color: #64748b;
     text-decoration: none;
-    transition: background 0.1s;
+    transition: background 0.1s, color 0.1s;
 }
 
-#pagination a:hover { background: #f3f4f6; color: #111827; }
+#pagination a:hover { background: rgba(255,255,255,0.07); color: #e2e8f0; }
 #pagination .on { background: #4f46e5 !important; color: #fff !important; font-weight: 700; cursor: default; }
 
 /* =======================================
@@ -736,4 +841,16 @@ body {
 .toast--show {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
+}
+
+/* =======================================
+   반응형
+   ======================================= */
+@media (max-width: 480px) {
+    .topnav-desc { display: none; }
+
+    .panel {
+        width: calc(100vw - 24px);
+        bottom: 16px;
+    }
 }

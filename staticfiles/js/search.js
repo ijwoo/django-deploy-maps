@@ -10,7 +10,7 @@ function toggleSidebar() {
 function searchPlaces() {
     var keyword = document.getElementById('keyword').value;
     if (!keyword.replace(/^\s+|\s+$/g, '')) {
-        alert('키워드를 입력해주세요!');
+        showToast('키워드를 입력해주세요');
         return false;
     }
     ps.keywordSearch(keyword, placesSearchCB);
@@ -21,9 +21,9 @@ function placesSearchCB(data, status, pagination) {
         displayPlaces(data);
         displayPagination(pagination);
     } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-        alert('검색 결과가 존재하지 않습니다.');
+        showToast('검색 결과가 없습니다');
     } else if (status === kakao.maps.services.Status.ERROR) {
-        alert('검색 결과 중 오류가 발생했습니다.');
+        showToast('검색 중 오류가 발생했습니다');
     }
 }
 
@@ -54,7 +54,7 @@ function getListItem(place, index) {
     var itemEl = document.createElement('li');
     itemEl.className = 'item';
 
-    var itemStr = '<span class="markerbg marker_' + index + '"></span>' +
+    var itemStr = '<span class="place-num">' + index + '</span>' +
                   '<div class="info">' +
                   '   <h5>' + place.place_name + '</h5>';
 
@@ -136,8 +136,6 @@ function selectSearchPlace(place) {
 }
 
 function setAsInput(address) {
-    fillNextInput(address);
-
     if (searchOverlay) {
         searchOverlay.setMap(null);
         searchOverlay = null;
@@ -149,7 +147,7 @@ function setAsInput(address) {
         togglePanel();
     }
 
-    showToast('출발지로 지정되었습니다');
+    fillNextInput(address);
 }
 
 function removeAllChildNodes(el) {
