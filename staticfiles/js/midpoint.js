@@ -219,61 +219,148 @@ function findMidpointAndStations() {
     });
 }
 
+// 두 좌표 사이 거리 계산 (km, Haversine)
+function haversineDistance(lat1, lng1, lat2, lng2) {
+  var R = 6371;
+  var dLat = (lat2 - lat1) * Math.PI / 180;
+  var dLng = (lng2 - lng1) * Math.PI / 180;
+  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+          Math.sin(dLng / 2) * Math.sin(dLng / 2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+// 각 출발지 → 중간지점 최대 거리 (km)
+function maxDistanceToMidpoint(midpoint, coords) {
+  var max = 0;
+  for (var i = 0; i < coords.length; i++) {
+    var d = haversineDistance(
+      midpoint[0], midpoint[1],
+      parseFloat(coords[i][1]), parseFloat(coords[i][0])
+    );
+    if (d > max) max = d;
+  }
+  return max;
+}
+
+// 교통수단 검색 순서: 지하철역 → 기차역 → 버스터미널
+var TRANSIT_TYPES = [
+  { query: '지하철역', icon: '🚇' },
+  { query: '기차역',  icon: '🚂' },
+  { query: '버스터미널', icon: '🚌' }
+];
+var TRANSIT_RADIUS = 10000; // 10km
+
 function findNearestStations(midpoint, result, coords, addresses) {
+  var maxDist = maxDistanceToMidpoint(midpoint, coords);
+
+  // 모두 2km 이내 → 교통수단 불필요, 중간지점만 표시
+  if (maxDist < 2) {
+    showMidpointOnly(midpoint, result);
+    setFindBtnLoading(false);
+    return;
+  }
+
+  // 교통수단 순서대로 검색
+  searchTransitInOrder(midpoint, result, coords, addresses, 0);
+}
+
+function searchTransitInOrder(midpoint, result, coords, addresses, idx) {
+  if (idx >= TRANSIT_TYPES.length) {
+    // 10km 안에 아무 교통수단도 없음 → 중간지점만 표시
+    showToast('주변 10km 내 대중교통을 찾을 수 없습니다. 지도에서 만날 곳을 정해보세요');
+    showMidpointOnly(midpoint, result);
+    setFindBtnLoading(false);
+    return;
+  }
+
+  var t = TRANSIT_TYPES[idx];
   var api_key = "2a976c987f3617744b5ee3ea43df3bd0";
   var url = "https://dapi.kakao.com/v2/local/search/keyword.json";
   var headers = { "Authorization": "KakaoAK " + api_key };
-  var params = { "query": "지하철역", "x": midpoint[1], "y": midpoint[0] };
+  var params = {
+    "query": t.query,
+    "x": midpoint[1],
+    "y": midpoint[0],
+    "radius": TRANSIT_RADIUS
+  };
+
   fetch(url + "?" + new URLSearchParams(params), { headers: headers })
     .then(function (response) { return response.json(); })
     .then(function (data) {
       if (data.documents && data.documents.length > 0) {
-        var station = data.documents.find(function (s) {
-          return s.category_group_name === "지하철역";
-        });
-        if (station) {
-          // 결과 표시 전 패널이 닫혀있으면 자동으로 열기
-          var panel = document.getElementById('panel');
-          if (panel && panel.classList.contains('panel--hidden')) {
-            togglePanel();
-          }
-
-          var midpointResult = document.getElementById("midpointResult");
-          midpointResult.innerHTML =
-            '<div class="result-station">' +
-            '  <span class="result-station-name">🚇 ' + station.place_name + '</span>' +
-            '</div>' +
-            '<div id="routeResultList"><span class="route-loading">경로 계산 중...</span></div>';
-
-          if (infowindow) { infowindow.close(); }
-
-          map.setCenter(new kakao.maps.LatLng(station.y, station.x));
-          map.setLevel(4);
-
-          stationOverlay = new kakao.maps.CustomOverlay({
-            map: map,
-            position: new kakao.maps.LatLng(station.y, station.x),
-            content: '<div class="customoverlay2">' +
-              '<a href="https://map.kakao.com/link/search/' + station.place_name + '" target="_blank">' +
-              '<span class="title">' + station.place_name + '</span>' +
-              '</a></div>',
-            yAnchor: 1
-          });
-
-          findPublicTransitRoutes(coords, station.x, station.y, addresses);
-        } else {
-          showToast('주변에 지하철역을 찾을 수 없습니다');
-          setFindBtnLoading(false);
-        }
+        showStationResult(data.documents[0], t.icon, midpoint, coords, addresses);
       } else {
-        showToast('주변에 지하철역을 찾을 수 없습니다');
-        setFindBtnLoading(false);
+        // 이 교통수단 없음 → 다음 종류로
+        searchTransitInOrder(midpoint, result, coords, addresses, idx + 1);
       }
     })
-    .catch(function (error) {
-      showToast('역 검색 중 오류가 발생했습니다');
-      setFindBtnLoading(false);
+    .catch(function () {
+      searchTransitInOrder(midpoint, result, coords, addresses, idx + 1);
     });
+}
+
+function showStationResult(station, icon, midpoint, coords, addresses) {
+  var panel = document.getElementById('panel');
+  if (panel && panel.classList.contains('panel--hidden')) { togglePanel(); }
+
+  var midpointResult = document.getElementById("midpointResult");
+  midpointResult.innerHTML =
+    '<div class="result-station">' +
+    '  <span class="result-station-name">' + icon + ' ' + station.place_name + '</span>' +
+    '</div>' +
+    '<div id="routeResultList"><span class="route-loading">경로 계산 중...</span></div>';
+
+  if (infowindow) { infowindow.close(); }
+  map.setCenter(new kakao.maps.LatLng(station.y, station.x));
+  map.setLevel(4);
+
+  stationOverlay = new kakao.maps.CustomOverlay({
+    map: map,
+    position: new kakao.maps.LatLng(station.y, station.x),
+    content: '<div class="customoverlay2">' +
+      '<a href="https://map.kakao.com/link/search/' + station.place_name + '" target="_blank">' +
+      '<span class="title">' + station.place_name + '</span>' +
+      '</a></div>',
+    yAnchor: 1
+  });
+
+  findPublicTransitRoutes(coords, station.x, station.y, addresses);
+}
+
+function showMidpointOnly(midpoint, result) {
+  var panel = document.getElementById('panel');
+  if (panel && panel.classList.contains('panel--hidden')) { togglePanel(); }
+
+  var addr = '';
+  if (result && result[0]) {
+    addr = result[0].road_address
+      ? result[0].road_address.address_name
+      : result[0].address.address_name;
+  }
+
+  var midpointResult = document.getElementById("midpointResult");
+  midpointResult.innerHTML =
+    '<div class="result-station">' +
+    '  <span class="result-station-name">📍 중간 지점</span>' +
+    '</div>' +
+    '<div class="midpoint-only">' +
+    '  <div class="midpoint-addr">' + (addr || '') + '</div>' +
+    '  <div class="midpoint-msg">모두 가까이 계십니다!<br>이 근처에서 만나보세요 😊</div>' +
+    '</div>';
+
+  if (infowindow) { infowindow.close(); }
+  map.setCenter(new kakao.maps.LatLng(midpoint[0], midpoint[1]));
+  map.setLevel(5);
+
+  stationOverlay = new kakao.maps.CustomOverlay({
+    map: map,
+    position: new kakao.maps.LatLng(midpoint[0], midpoint[1]),
+    content: '<div class="customoverlay2">' +
+      '<a href="#"><span class="title">중간 지점</span></a>' +
+      '</div>',
+    yAnchor: 1
+  });
 }
 
 function findPublicTransitRoutes(startCoords, endX, endY, addresses) {
