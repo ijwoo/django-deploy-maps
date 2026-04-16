@@ -1,7 +1,7 @@
 var mapContainer = document.getElementById('map'); // 지도를 표시할 div
 var mapOption = {
   center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
-  level: 1 // 지도의 확대 레벨
+  level: 8 // 지도의 확대 레벨
 };
 
 // 지도를 생성합니다
@@ -87,7 +87,7 @@ kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
     });
 });
 //마커 이미지
-var imageSrc = '/static/images/marker_purple.png', // 마커이미지의 주소입니다    
+var imageSrc = '/static/images/marker_purple.png', // 마커이미지의 주소입니다
     imageSize = new kakao.maps.Size(35, 30), // 마커이미지의 크기입니다
     imageOption = {offset: new kakao.maps.Point(17.5,30)};
 var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
@@ -103,6 +103,14 @@ var addressOverlays = [];   // 출발지 오버레이 목록
 var stationOverlay = null;  // 중간 역 오버레이
 
 var routeColors = ['#ff6b6b', '#4fc3f7', '#aed581', '#ffb74d', '#f06292'];
+
+// 중간지점 찾기 버튼 로딩 상태 제어
+function setFindBtnLoading(loading) {
+    var btn = document.querySelector('.btn-find');
+    if (!btn) return;
+    btn.disabled = loading;
+    btn.textContent = loading ? '계산 중...' : '중간지점 찾기';
+}
 
 function clearMapOverlays() {
   clearClickOverlay();
@@ -135,13 +143,22 @@ function findMidpointAndStations() {
   var inputs = document.querySelectorAll('.coordinate-input');
   var addresses = [];
 
-  // 입력된 주소들을 배열에 저장
+  // 입력값 검증
   for (var i = 0; i < inputs.length; i++) {
-    addresses.push(inputs[i].value);
+    var val = inputs[i].value.trim();
+    if (!val) {
+      showToast('주소를 모두 입력해주세요');
+      inputs[i].focus();
+      return;
+    }
+    addresses.push(val);
   }
 
   // 기존 마커/오버레이/경로 초기화
   clearMapOverlays();
+
+  // 로딩 상태 시작
+  setFindBtnLoading(true);
 
   // 주소들을 좌표로 변환
   var geocoder = new kakao.maps.services.Geocoder();
@@ -150,9 +167,8 @@ function findMidpointAndStations() {
       geocoder.addressSearch(address, function (result, status) {
         if (status === kakao.maps.services.Status.OK) {
           resolve([result[0].x, result[0].y]);
-          console.log("위도,경도:", result[0].x, result[0].y);
         } else {
-          reject();
+          reject(address);
         }
       });
     });
@@ -197,12 +213,14 @@ function findMidpointAndStations() {
         if (status === kakao.maps.services.Status.OK) {
           findNearestStations([midpointY, midpointX], result, coords, addresses);
         } else {
-          console.log('중간지점 주소를 찾을 수 없습니다.');
+          showToast('중간지점 주소를 찾을 수 없습니다');
+          setFindBtnLoading(false);
         }
       });
     })
-    .catch(function () {
-      console.log('주소를 변환할 수 없습니다.');
+    .catch(function (failedAddress) {
+      showToast('주소를 찾을 수 없습니다. 다시 확인해주세요');
+      setFindBtnLoading(false);
     });
 }
 
@@ -219,6 +237,12 @@ function findNearestStations(midpoint, result, coords, addresses) {
           return s.category_group_name === "지하철역";
         });
         if (station) {
+          // 결과 표시 전 패널이 닫혀있으면 자동으로 열기
+          var panel = document.getElementById('panel');
+          if (panel && panel.classList.contains('panel--hidden')) {
+            togglePanel();
+          }
+
           var midpointResult = document.getElementById("midpointResult");
           midpointResult.innerHTML =
             '<div class="result-station">' +
@@ -243,14 +267,17 @@ function findNearestStations(midpoint, result, coords, addresses) {
 
           findPublicTransitRoutes(coords, station.x, station.y, addresses);
         } else {
-          console.log("주변 지하철 역을 찾을 수 없습니다.");
+          showToast('주변에 지하철역을 찾을 수 없습니다');
+          setFindBtnLoading(false);
         }
       } else {
-        console.log("주변 역을 찾을 수 없습니다.");
+        showToast('주변에 지하철역을 찾을 수 없습니다');
+        setFindBtnLoading(false);
       }
     })
     .catch(function (error) {
-      console.log("API 요청 중 오류가 발생했습니다.", error);
+      showToast('역 검색 중 오류가 발생했습니다');
+      setFindBtnLoading(false);
     });
 }
 
@@ -297,13 +324,13 @@ function findPublicTransitRoutes(startCoords, endX, endY, addresses) {
         }
       })
       .catch(function (error) {
-        console.log("API 요청 중 오류가 발생했습니다.", error);
         routeResults[idx] = null;
       });
   });
 
   Promise.all(routePromises).then(function () {
     displayRouteResults(routeResults, addresses);
+    setFindBtnLoading(false);
   });
 }
 

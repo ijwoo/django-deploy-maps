@@ -12,7 +12,8 @@
       "Bash(cmd.exe /c \"where python 2>&1\")",
       "Bash(cmd.exe:*)",
       "Bash(python manage.py shell -c \"from django.contrib.auth.models import User; print\\(list\\(User.objects.values\\('username', 'is_superuser'\\)\\)\\)\")",
-      "Bash(python3 manage.py shell -c \"from django.contrib.auth.models import User; print\\(list\\(User.objects.values\\('username', 'is_superuser'\\)\\)\\)\")"
+      "Bash(python3 manage.py shell -c \"from django.contrib.auth.models import User; print\\(list\\(User.objects.values\\('username', 'is_superuser'\\)\\)\\)\")",
+      "WebFetch(domain:imjaewoo.dev)"
     ]
   }
 }
