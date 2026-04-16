@@ -867,13 +867,112 @@ body {
 }
 
 /* =======================================
-   반응형
+   드래그 핸들 (모바일에서만 표시)
    ======================================= */
-@media (max-width: 480px) {
+.panel-drag-handle {
+    display: none;
+    width: 36px;
+    height: 4px;
+    background: rgba(255,255,255,0.18);
+    border-radius: 2px;
+    margin: 10px auto 14px;
+    flex-shrink: 0;
+}
+
+/* =======================================
+   반응형 (모바일: 640px 이하)
+   ======================================= */
+@media (max-width: 640px) {
+
+    /* 네비 */
     .topnav-desc { display: none; }
 
+    /* ── 패널: 하단 시트 ── */
     .panel {
-        width: calc(100vw - 24px);
-        bottom: 16px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        max-width: 100%;
+        max-height: 80vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        transform: translateY(0);
+        border-radius: 20px 20px 0 0;
+        padding: 0 16px max(env(safe-area-inset-bottom, 0px), 20px);
+    }
+
+    .panel-drag-handle { display: block; }
+
+    /* 열림/닫힘: 슬라이드 다운 */
+    .panel--hidden {
+        opacity: 1;
+        transform: translateY(100%);
+        pointer-events: none;
+    }
+
+    /* ── 입력 필드 ── */
+    /* iOS는 font-size < 16px이면 포커스 시 자동 확대됨 → 강제 16px */
+    .coordinate-input {
+        font-size: 16px;
+        padding: 13px 14px;
+    }
+
+    #keyword { font-size: 16px; }
+
+    .input-container { gap: 10px; margin-bottom: 14px; }
+    .input-row        { gap: 10px; }
+
+    /* ── 터치 타겟 (최소 44px) ── */
+    .btn-find      { padding: 13px 0; font-size: 14px; }
+    .btn-add       { padding: 13px 16px; font-size: 13px; }
+    .remove-button { width: 36px; height: 36px; }
+    .input-label   { width: 28px; height: 28px; font-size: 13px; }
+    .btn-myloc     { padding: 8px 12px; font-size: 12.5px; }
+    .panel-close   { width: 32px; height: 32px; }
+
+    /* ── 출발지 추가 확인 UI ── */
+    .add-confirm-yes,
+    .add-confirm-no { padding: 9px 0; font-size: 13px; }
+
+    /* ── 경로 결과 ── */
+    .route-item { padding: 10px 0; }
+
+    /* ── 토스트: 패널에 가려지지 않게 상단 ── */
+    .toast {
+        bottom: auto;
+        top: 58px;
+        transform: translateX(-50%) translateY(-8px);
+    }
+    .toast--show {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── 사이드바 ── */
+    #menu_wrap {
+        width: calc(100vw - 28px);
+        max-height: 55vh;
+        overflow-y: auto;
+    }
+
+    #placesList { max-height: none; }
+
+    /* 목록 아이템 터치 영역 확보 */
+    #placesList .item {
+        padding: 12px 14px;
+        min-height: 56px;
+    }
+
+    /* ── 지도 클릭 오버레이: 모바일 크기 ── */
+    .search-result-overlay {
+        min-width: 160px;
+        max-width: 200px;
+        padding: 10px 12px 9px;
+    }
+
+    .search-result-overlay button {
+        width: 100%;
+        padding: 8px 0;
     }
 }
