@@ -98,7 +98,6 @@ function selectSearchPlace(place) {
     var closeBtn = document.createElement('button');
     closeBtn.className = 'overlay-close-btn';
     closeBtn.textContent = '✕';
-    closeBtn.addEventListener('mousedown', function(e) { e.stopPropagation(); suppressMapClick = true; });
     closeBtn.addEventListener('click', function(e) { e.stopPropagation(); clearSearchMarkers(); });
 
     var nameEl = document.createElement('strong');
@@ -109,10 +108,6 @@ function selectSearchPlace(place) {
 
     var btn = document.createElement('button');
     btn.textContent = '출발지로 지정';
-    btn.addEventListener('mousedown', function(e) {
-        e.stopPropagation();
-        suppressMapClick = true;
-    });
     btn.addEventListener('click', function (e) {
         e.stopPropagation();
         setAsInput(place.place_name, place.y, place.x);

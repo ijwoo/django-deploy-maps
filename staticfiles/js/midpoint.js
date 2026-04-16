@@ -7,80 +7,6 @@ var mapOption = {
 // 지도를 생성합니다
 var map = new kakao.maps.Map(mapContainer, mapOption);
 var infowindow = null;
-
-// 지도 클릭 → 역지오코딩 → 툴팁 표시 → 버튼 클릭 시 입력
-var suppressMapClick = false;
-var clickMarker = null;
-var clickOverlay = null;
-
-function clearClickOverlay() {
-    if (clickMarker) { clickMarker.setMap(null); clickMarker = null; }
-    if (clickOverlay) { clickOverlay.setMap(null); clickOverlay = null; }
-}
-
-var geocoderForClick = new kakao.maps.services.Geocoder();
-kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
-    if (suppressMapClick) {
-        suppressMapClick = false;
-        return;
-    }
-    var latlng = mouseEvent.latLng;
-
-    clearClickOverlay();
-
-    geocoderForClick.coord2Address(latlng.getLng(), latlng.getLat(), function(result, status) {
-        if (status !== kakao.maps.services.Status.OK) return;
-
-        var address = result[0].road_address
-            ? result[0].road_address.address_name
-            : result[0].address.address_name;
-
-        clickMarker = new kakao.maps.Marker({ position: latlng });
-        clickMarker.setMap(map);
-
-        var wrap = document.createElement('div');
-        wrap.className = 'search-result-overlay';
-
-        var closeBtn = document.createElement('button');
-        closeBtn.className = 'overlay-close-btn';
-        closeBtn.textContent = '✕';
-        closeBtn.addEventListener('mousedown', function(e) { e.stopPropagation(); suppressMapClick = true; });
-        closeBtn.addEventListener('click', function(e) { e.stopPropagation(); clearClickOverlay(); });
-
-        var addrEl = document.createElement('span');
-        addrEl.textContent = address;
-
-        var btn = document.createElement('button');
-        btn.textContent = '출발지로 지정';
-
-        // mousedown에서 플래그 설정 — 카카오맵이 click 처리하기 전에 차단
-        btn.addEventListener('mousedown', function(e) {
-            e.stopPropagation();
-            suppressMapClick = true;
-        });
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            fillNextInput(address, latlng.getLat(), latlng.getLng());
-            clearClickOverlay();
-        });
-
-        // 오버레이 영역 mousedown도 차단
-        wrap.addEventListener('mousedown', function(e) {
-            e.stopPropagation();
-        });
-
-        wrap.appendChild(closeBtn);
-        wrap.appendChild(addrEl);
-        wrap.appendChild(btn);
-
-        clickOverlay = new kakao.maps.CustomOverlay({
-            map: map,
-            position: latlng,
-            content: wrap,
-            yAnchor: 1
-        });
-    });
-});
 //마커 이미지
 var imageSrc = '/static/images/marker_purple.png', // 마커이미지의 주소입니다
     imageSize = new kakao.maps.Size(35, 30), // 마커이미지의 크기입니다
@@ -108,7 +34,6 @@ function setFindBtnLoading(loading) {
 }
 
 function clearMapOverlays() {
-  clearClickOverlay();
   // 출발지 마커/오버레이 제거
   for (var i = 0; i < addressMarkers.length; i++) {
     addressMarkers[i].setMap(null);
