@@ -13,7 +13,8 @@
       "Bash(cmd.exe:*)",
       "Bash(python manage.py shell -c \"from django.contrib.auth.models import User; print\\(list\\(User.objects.values\\('username', 'is_superuser'\\)\\)\\)\")",
       "Bash(python3 manage.py shell -c \"from django.contrib.auth.models import User; print\\(list\\(User.objects.values\\('username', 'is_superuser'\\)\\)\\)\")",
-      "WebFetch(domain:imjaewoo.dev)"
+      "WebFetch(domain:imjaewoo.dev)",
+      "Bash(myvenv/Scripts/python manage.py collectstatic --noinput)"
     ]
   }
 }

@@ -128,6 +128,14 @@
         label.textContent = panelOpen ? '닫기' : '주소 입력';
     }
 
+    // 패널 터치/클릭이 아래 지도로 전파되는 것을 차단
+    (function() {
+        var panel = document.getElementById('panel');
+        panel.addEventListener('click',      function(e) { e.stopPropagation(); });
+        panel.addEventListener('touchstart', function(e) { e.stopPropagation(); }, { passive: true });
+        panel.addEventListener('touchend',   function(e) { e.stopPropagation(); }, { passive: true });
+    })();
+
     function showToast(msg) {
         var toast = document.getElementById('toast');
         toast.textContent = msg;
