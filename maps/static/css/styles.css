@@ -867,6 +867,237 @@ body {
 }
 
 /* =======================================
+   주소 검색 모달
+   ======================================= */
+.addr-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 600;
+}
+
+.addr-modal--open { display: block; }
+
+.addr-modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+}
+
+/* 데스크탑: 중앙 카드 */
+.addr-modal-sheet {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 460px;
+    max-width: calc(100vw - 32px);
+    max-height: 72vh;
+    background: rgba(13, 20, 38, 0.99);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 18px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+    animation: addrModalIn 0.18s ease;
+}
+
+@keyframes addrModalIn {
+    from { opacity: 0; transform: translate(-50%, -47%); }
+    to   { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.addr-modal-drag {
+    display: none;
+    width: 36px;
+    height: 4px;
+    background: rgba(255,255,255,0.18);
+    border-radius: 2px;
+    margin: 10px auto 0;
+    flex-shrink: 0;
+}
+
+.addr-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    flex-shrink: 0;
+}
+
+.addr-modal-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #e2e8f0;
+    letter-spacing: -0.01em;
+}
+
+.addr-modal-close {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.06);
+    border: none;
+    border-radius: 7px;
+    color: #94a3b8;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.addr-modal-close:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+.addr-modal-search {
+    position: relative;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    flex-shrink: 0;
+}
+
+.addr-search-icon {
+    position: absolute;
+    left: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: #475569;
+    pointer-events: none;
+}
+
+.addr-modal-search input {
+    width: 100%;
+    padding: 10px 12px 10px 40px;
+    background: rgba(255,255,255,0.07);
+    border: 1.5px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    color: #f1f5f9;
+    font-size: 16px; /* iOS 자동 확대 방지 */
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+    font-family: inherit;
+}
+
+.addr-modal-search input:focus {
+    border-color: #6366f1;
+    background: rgba(255,255,255,0.1);
+}
+
+.addr-modal-search input::placeholder { color: #475569; }
+
+#addr-result-list {
+    flex: 1;
+    overflow-y: auto;
+    list-style: none;
+    padding: 6px 0;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+}
+
+#addr-result-list::-webkit-scrollbar { width: 4px; }
+#addr-result-list::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+}
+
+.addr-result-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 18px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: background 0.1s;
+}
+
+.addr-result-item:last-child { border-bottom: none; }
+.addr-result-item:hover  { background: rgba(99,102,241,0.1); }
+.addr-result-item:active { background: rgba(99,102,241,0.15); }
+
+.addr-result-icon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(99,102,241,0.15);
+    border-radius: 8px;
+    color: #818cf8;
+}
+
+.addr-result-info { flex: 1; min-width: 0; }
+
+.addr-result-name {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #e2e8f0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+}
+
+.addr-result-addr {
+    font-size: 11.5px;
+    color: #64748b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.addr-result-empty,
+.addr-result-loading {
+    padding: 32px 18px;
+    text-align: center;
+    color: #475569;
+    font-size: 13px;
+    list-style: none;
+}
+
+/* readonly 입력칸 스타일 */
+.coordinate-input[readonly] {
+    cursor: pointer;
+}
+
+.coordinate-input[readonly]:hover {
+    border-color: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.08);
+}
+
+/* 모바일: 하단 시트 */
+@media (max-width: 640px) {
+    .addr-modal-drag { display: block; }
+
+    .addr-modal-sheet {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        transform: none;
+        width: 100%;
+        max-width: 100%;
+        max-height: 92vh;
+        border-radius: 20px 20px 0 0;
+        animation: addrSheetIn 0.22s ease;
+    }
+
+    @keyframes addrSheetIn {
+        from { transform: translateY(100%); }
+        to   { transform: translateY(0); }
+    }
+
+    .addr-modal-close { width: 32px; height: 32px; }
+
+    .addr-result-item { padding: 13px 18px; min-height: 56px; }
+}
+
+/* =======================================
    드래그 핸들 (모바일에서만 표시)
    ======================================= */
 .panel-drag-handle {

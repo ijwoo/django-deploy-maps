@@ -60,7 +60,7 @@ kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
         });
         btn.addEventListener('click', function(e) {
             e.stopPropagation();
-            fillNextInput(address);
+            fillNextInput(address, latlng.getLat(), latlng.getLng());
             clearClickOverlay();
         });
 
@@ -155,9 +155,14 @@ function findMidpointAndStations() {
   // 로딩 상태 시작
   setFindBtnLoading(true);
 
-  // 주소들을 좌표로 변환
+  // 주소들을 좌표로 변환 (모달에서 선택한 경우 data 속성으로 이미 저장된 좌표 사용)
   var geocoder = new kakao.maps.services.Geocoder();
-  var geocodePromises = addresses.map(function (address) {
+  var geocodePromises = addresses.map(function (address, i) {
+    var input = inputs[i];
+    // 모달 선택으로 좌표가 이미 저장된 경우 → geocoding 생략
+    if (input && input.dataset.lat && input.dataset.lng) {
+      return Promise.resolve([input.dataset.lng, input.dataset.lat]);
+    }
     return new Promise(function (resolve, reject) {
       geocoder.addressSearch(address, function (result, status) {
         if (status === kakao.maps.services.Status.OK) {

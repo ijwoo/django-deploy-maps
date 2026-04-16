@@ -115,7 +115,7 @@ function selectSearchPlace(place) {
     });
     btn.addEventListener('click', function (e) {
         e.stopPropagation();
-        setAsInput(address);
+        setAsInput(place.place_name, place.y, place.x);
     });
 
     wrap.addEventListener('mousedown', function(e) {
@@ -135,7 +135,7 @@ function selectSearchPlace(place) {
     });
 }
 
-function setAsInput(address) {
+function setAsInput(address, lat, lng) {
     if (searchOverlay) {
         searchOverlay.setMap(null);
         searchOverlay = null;
@@ -147,7 +147,7 @@ function setAsInput(address) {
         togglePanel();
     }
 
-    fillNextInput(address);
+    fillNextInput(address, lat, lng);
 }
 
 function removeAllChildNodes(el) {

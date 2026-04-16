@@ -46,12 +46,12 @@
     <div class="input-container" id="input-container">
         <div class="input-row">
             <span class="input-label">1</span>
-            <input type="text" name="coordinate-input" class="coordinate-input" placeholder="주소 입력 또는 지도 클릭">
+            <input type="text" name="coordinate-input" class="coordinate-input" placeholder="클릭하여 출발지 검색" readonly>
             <button class="remove-button" onclick="removeAddressInput(this)">✕</button>
         </div>
         <div class="input-row">
             <span class="input-label">2</span>
-            <input type="text" name="coordinate-input" class="coordinate-input" placeholder="주소 입력 또는 지도 클릭">
+            <input type="text" name="coordinate-input" class="coordinate-input" placeholder="클릭하여 출발지 검색" readonly>
             <button class="remove-button" onclick="removeAddressInput(this)">✕</button>
         </div>
     </div>
@@ -87,6 +87,25 @@
         </form>
         <ul id="placesList"></ul>
         <div id="pagination"></div>
+    </div>
+</div>
+
+<!-- 주소 검색 모달 -->
+<div class="addr-modal" id="addr-modal">
+    <div class="addr-modal-overlay" id="addr-modal-overlay"></div>
+    <div class="addr-modal-sheet">
+        <div class="addr-modal-drag"></div>
+        <div class="addr-modal-header">
+            <span class="addr-modal-title">출발지 검색</span>
+            <button class="addr-modal-close" id="addr-modal-close">✕</button>
+        </div>
+        <div class="addr-modal-search">
+            <svg class="addr-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input type="text" id="addr-search-input" placeholder="장소명 또는 주소를 입력하세요" autocomplete="off">
+        </div>
+        <ul id="addr-result-list"></ul>
     </div>
 </div>
 
